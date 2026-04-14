@@ -1,0 +1,46 @@
+{
+  "manifest_version": 3,
+  "name": "PagePilot Capture",
+  "description": "Full-page screenshot capture. Preview, download as PNG, export as PDF, or copy to clipboard.",
+  "version": "1.0.0",
+
+  "action": {
+    "default_title": "Capture Full Page",
+    "default_icon": {
+      "16":  "icons/icon16.png",
+      "32":  "icons/icon32.png",
+      "48":  "icons/icon48.png",
+      "128": "icons/icon128.png"
+    }
+  },
+
+  "background": {
+    "service_worker": "service-worker.js"
+  },
+
+  "permissions": [
+    "activeTab",
+    "tabs",
+    "scripting",
+    "downloads",
+    "storage",
+    "clipboardWrite"
+  ],
+
+  "commands": {
+    "capture-full-page": {
+      "suggested_key": {
+        "default": "Alt+Shift+P",
+        "mac":     "Alt+Shift+P"
+      },
+      "description": "Capture a full-page screenshot of the active tab"
+    }
+  },
+
+  "icons": {
+    "16":  "icons/icon16.png",
+    "32":  "icons/icon32.png",
+    "48":  "icons/icon48.png",
+    "128": "icons/icon128.png"
+  }
+}

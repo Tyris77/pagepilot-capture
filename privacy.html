@@ -1,0 +1,379 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="UTF-8" />
+  <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+  <title>Privacy Policy — PagePilot Capture</title>
+  <meta name="description" content="PagePilot Capture Privacy Policy. All processing happens locally in your browser. No data is collected, stored, or shared." />
+  <link rel="preconnect" href="https://fonts.googleapis.com" />
+  <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin />
+  <link href="https://fonts.googleapis.com/css2?family=Inter:wght@400;500;600;700&display=swap" rel="stylesheet" />
+  <style>
+    :root {
+      --blue:    #3069F5;
+      --dark:    #0f172a;
+      --text:    #334155;
+      --muted:   #64748b;
+      --border:  #e2e8f0;
+      --surface: #f8fafc;
+      --white:   #ffffff;
+      --radius:  10px;
+      --font:    'Inter', -apple-system, BlinkMacSystemFont, 'Segoe UI', sans-serif;
+    }
+    *, *::before, *::after { box-sizing: border-box; margin: 0; padding: 0; }
+    html { -webkit-font-smoothing: antialiased; scroll-behavior: smooth; }
+    body { font-family: var(--font); color: var(--text); background: var(--white); font-size: 16px; line-height: 1.7; }
+    a { color: var(--blue); text-decoration: underline; }
+    a:hover { opacity: .8; }
+
+    /* Nav */
+    nav {
+      background: var(--white);
+      border-bottom: 1px solid var(--border);
+      height: 60px;
+      display: flex;
+      align-items: center;
+    }
+    .nav-inner {
+      max-width: 1100px;
+      margin: 0 auto;
+      padding: 0 24px;
+      width: 100%;
+      display: flex;
+      align-items: center;
+      justify-content: space-between;
+    }
+    .nav-brand {
+      display: flex;
+      align-items: center;
+      gap: 9px;
+      font-weight: 700;
+      font-size: 16px;
+      color: var(--dark);
+      text-decoration: none;
+      letter-spacing: -.3px;
+    }
+    .nav-brand-icon {
+      width: 28px; height: 28px;
+      background: var(--blue);
+      border-radius: 7px;
+      display: flex;
+      align-items: center;
+      justify-content: center;
+    }
+    .nav-brand-icon svg { width: 14px; height: 14px; color: #fff; }
+    .nav-back {
+      font-size: 14px;
+      color: var(--muted);
+      text-decoration: none;
+      display: flex;
+      align-items: center;
+      gap: 6px;
+      font-weight: 500;
+      transition: color .15s;
+    }
+    .nav-back:hover { color: var(--dark); }
+
+    /* Hero strip */
+    .page-hero {
+      background: var(--surface);
+      border-bottom: 1px solid var(--border);
+      padding: 56px 24px 48px;
+      text-align: center;
+    }
+    .page-hero h1 {
+      font-size: 36px;
+      font-weight: 700;
+      color: var(--dark);
+      letter-spacing: -.025em;
+      margin-bottom: 10px;
+    }
+    .page-hero p {
+      font-size: 16px;
+      color: var(--muted);
+    }
+
+    /* Content */
+    .content {
+      max-width: 720px;
+      margin: 0 auto;
+      padding: 64px 24px 96px;
+    }
+    .toc {
+      background: var(--surface);
+      border: 1px solid var(--border);
+      border-radius: var(--radius);
+      padding: 24px 28px;
+      margin-bottom: 48px;
+    }
+    .toc h2 { font-size: 14px; font-weight: 600; color: var(--dark); margin-bottom: 12px; text-transform: uppercase; letter-spacing: .07em; }
+    .toc ol { padding-left: 18px; }
+    .toc li { font-size: 14px; margin-bottom: 6px; }
+    .toc a { color: var(--muted); text-decoration: none; }
+    .toc a:hover { color: var(--blue); text-decoration: underline; }
+
+    .policy-section { margin-bottom: 48px; }
+    .policy-section h2 {
+      font-size: 20px;
+      font-weight: 700;
+      color: var(--dark);
+      letter-spacing: -.015em;
+      margin-bottom: 16px;
+      padding-top: 8px;
+      border-top: 2px solid var(--blue);
+      padding-top: 16px;
+    }
+    .policy-section p { margin-bottom: 14px; color: var(--text); font-size: 15px; }
+    .policy-section p:last-child { margin-bottom: 0; }
+    .policy-section ul {
+      padding-left: 20px;
+      margin-bottom: 14px;
+    }
+    .policy-section li {
+      margin-bottom: 8px;
+      font-size: 15px;
+      color: var(--text);
+    }
+
+    /* Permission table */
+    .perm-table {
+      width: 100%;
+      border-collapse: collapse;
+      margin-bottom: 14px;
+      font-size: 14px;
+    }
+    .perm-table th {
+      text-align: left;
+      font-weight: 600;
+      color: var(--dark);
+      padding: 10px 14px;
+      background: var(--surface);
+      border: 1px solid var(--border);
+      font-size: 13px;
+      text-transform: uppercase;
+      letter-spacing: .05em;
+    }
+    .perm-table td {
+      padding: 10px 14px;
+      border: 1px solid var(--border);
+      vertical-align: top;
+      line-height: 1.5;
+      color: var(--text);
+    }
+    .perm-table tr:nth-child(even) td { background: var(--surface); }
+    code {
+      background: var(--surface);
+      border: 1px solid var(--border);
+      border-radius: 4px;
+      padding: 1px 6px;
+      font-size: 13px;
+      font-family: 'SF Mono', Consolas, monospace;
+      color: #c7254e;
+    }
+
+    /* Highlight box */
+    .highlight-box {
+      background: #eff4ff;
+      border: 1px solid #c7d9fd;
+      border-radius: var(--radius);
+      padding: 20px 24px;
+      margin-bottom: 14px;
+      font-size: 15px;
+    }
+    .highlight-box strong { color: var(--blue); }
+
+    /* Footer */
+    footer {
+      background: var(--dark);
+      color: #94a3b8;
+      padding: 32px 24px;
+      font-size: 14px;
+      text-align: center;
+    }
+    footer a { color: #94a3b8; }
+    footer a:hover { color: #fff; }
+
+    @media (max-width: 640px) {
+      .page-hero h1 { font-size: 28px; }
+      .content { padding: 40px 20px 72px; }
+    }
+  </style>
+</head>
+<body>
+
+  <!-- Nav -->
+  <nav>
+    <div class="nav-inner">
+      <a href="index.html" class="nav-brand">
+        <div class="nav-brand-icon">
+          <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.2" stroke-linecap="round" stroke-linejoin="round">
+            <path d="M23 19a2 2 0 0 1-2 2H3a2 2 0 0 1-2-2V8a2 2 0 0 1 2-2h4l2-3h6l2 3h4a2 2 0 0 1 2 2z"/>
+            <circle cx="12" cy="13" r="4"/>
+          </svg>
+        </div>
+        PagePilot Capture
+      </a>
+      <a href="index.html" class="nav-back">
+        <svg width="16" height="16" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><polyline points="15 18 9 12 15 6"/></svg>
+        Back to home
+      </a>
+    </div>
+  </nav>
+
+  <!-- Hero -->
+  <div class="page-hero">
+    <h1>Privacy Policy</h1>
+    <p>Last updated: April 12, 2026</p>
+  </div>
+
+  <!-- Content -->
+  <main class="content">
+
+    <div class="highlight-box">
+      <strong>Short version:</strong> PagePilot Capture processes all screenshots locally inside your browser. We do not collect, transmit, store, or sell any personal information or screenshot data. Ever.
+    </div>
+
+    <!-- Table of Contents -->
+    <div class="toc">
+      <h2>Contents</h2>
+      <ol>
+        <li><a href="#overview">Overview</a></li>
+        <li><a href="#data-collected">Data we collect</a></li>
+        <li><a href="#how-it-works">How the extension works</a></li>
+        <li><a href="#permissions">Chrome permissions explained</a></li>
+        <li><a href="#third-parties">Third-party services</a></li>
+        <li><a href="#data-retention">Data retention</a></li>
+        <li><a href="#children">Children's privacy</a></li>
+        <li><a href="#changes">Changes to this policy</a></li>
+        <li><a href="#contact">Contact</a></li>
+      </ol>
+    </div>
+
+    <!-- 1. Overview -->
+    <div class="policy-section" id="overview">
+      <h2>1. Overview</h2>
+      <p>PagePilot Capture ("the extension," "we," "our") is a Chrome browser extension that captures full-page screenshots of webpages. This Privacy Policy explains how the extension handles information when you use it.</p>
+      <p>The extension is designed with a privacy-first architecture. All screenshot capture, image stitching, and export functionality runs entirely inside your local browser. No screenshot data, page content, or personal information is transmitted to any external server operated by us or any third party.</p>
+    </div>
+
+    <!-- 2. Data Collected -->
+    <div class="policy-section" id="data-collected">
+      <h2>2. Data We Collect</h2>
+      <p><strong>Personal information: none.</strong> We do not collect your name, email address, IP address, device identifiers, or any other personally identifiable information.</p>
+      <p><strong>Screenshots and page content: none.</strong> Screenshots are created on your device using the browser's built-in Canvas API and Chrome's <code>captureVisibleTab</code> API. They are never uploaded to, or processed by, any server outside your local machine.</p>
+      <p><strong>Usage data: none.</strong> We do not use analytics tools, crash-reporting services, or any other telemetry system. We have no visibility into how or how often you use the extension.</p>
+      <p><strong>Chrome extension storage:</strong> The extension uses <code>chrome.storage.session</code> (and <code>chrome.storage.local</code> as a fallback) to temporarily hold screenshot slice data between when a capture completes and when the preview tab loads — typically a few seconds. This data lives entirely on your device, is never synced to Google's servers, and is automatically cleared once the preview tab reads it.</p>
+    </div>
+
+    <!-- 3. How It Works -->
+    <div class="policy-section" id="how-it-works">
+      <h2>3. How the Extension Works</h2>
+      <p>When you trigger a capture, the extension performs all of the following steps locally inside your browser:</p>
+      <ul>
+        <li>A content script is injected into the target tab to measure page dimensions and control scrolling.</li>
+        <li>Chrome's <code>captureVisibleTab()</code> API is called repeatedly as the page scrolls, capturing each viewport section as a PNG data URL in memory.</li>
+        <li>The slice data is written to <code>chrome.storage.session</code> on your device.</li>
+        <li>A preview tab opens, reads the slice data from storage, stitches the slices together on an HTML Canvas element, and immediately deletes the data from storage.</li>
+        <li>You may then download the result as a PNG file, export it as a PDF, or copy it to your clipboard — all locally.</li>
+      </ul>
+      <p>No step in this pipeline involves a network request to any server controlled by us. The only network activity that may occur is Chrome's own internal communication between extension contexts, which is governed by Google's Chrome privacy policy.</p>
+    </div>
+
+    <!-- 4. Permissions -->
+    <div class="policy-section" id="permissions">
+      <h2>4. Chrome Permissions Explained</h2>
+      <p>PagePilot Capture requests the following Chrome permissions. Each is used only for the stated purpose:</p>
+      <table class="perm-table">
+        <thead>
+          <tr>
+            <th>Permission</th>
+            <th>Why it's needed</th>
+          </tr>
+        </thead>
+        <tbody>
+          <tr>
+            <td><code>activeTab</code></td>
+            <td>Grants temporary access to the currently active tab when you click the toolbar icon or use the keyboard shortcut. Access is limited to that tab and that moment only.</td>
+          </tr>
+          <tr>
+            <td><code>tabs</code></td>
+            <td>Required to call <code>chrome.tabs.captureVisibleTab()</code> (the screenshot API) and to open the results preview tab.</td>
+          </tr>
+          <tr>
+            <td><code>scripting</code></td>
+            <td>Required to inject the content script into the target page so the extension can read page dimensions and control scrolling.</td>
+          </tr>
+          <tr>
+            <td><code>storage</code></td>
+            <td>Used to temporarily hold screenshot slice data in <code>chrome.storage.session</code> (device-local) between the capture and the preview tab. Data is cleared automatically once the preview tab reads it.</td>
+          </tr>
+          <tr>
+            <td><code>clipboardWrite</code></td>
+            <td>Allows the extension's preview page to write a PNG image to your clipboard when you click "Copy Image."</td>
+          </tr>
+          <tr>
+            <td><code>downloads</code></td>
+            <td>Reserved for potential future use. Currently, file downloads are triggered via an HTML anchor tag and this permission is not actively invoked.</td>
+          </tr>
+        </tbody>
+      </table>
+      <p>We request only the permissions necessary for the extension to function. We do not request <code>history</code>, <code>bookmarks</code>, <code>cookies</code>, <code>identity</code>, or broad host permissions.</p>
+    </div>
+
+    <!-- 5. Third Parties -->
+    <div class="policy-section" id="third-parties">
+      <h2>5. Third-Party Services</h2>
+      <p>PagePilot Capture does not integrate with, or transmit data to, any third-party service. Specifically:</p>
+      <ul>
+        <li>No analytics provider (Google Analytics, Mixpanel, Amplitude, etc.)</li>
+        <li>No crash-reporting service (Sentry, Bugsnag, etc.)</li>
+        <li>No advertising network</li>
+        <li>No remote configuration or feature-flag service</li>
+        <li>No cloud storage or screenshot processing API</li>
+      </ul>
+      <p>The extension's landing page (this website) is hosted on GitHub Pages. GitHub may log standard web server information such as your IP address when you visit this site. This logging is governed by <a href="https://docs.github.com/en/site-policy/privacy-policies/github-general-privacy-statement" target="_blank" rel="noopener">GitHub's Privacy Statement</a>, not this policy.</p>
+    </div>
+
+    <!-- 6. Data Retention -->
+    <div class="policy-section" id="data-retention">
+      <h2>6. Data Retention</h2>
+      <p>Because we collect no personal data, there is nothing for us to retain or delete on your behalf.</p>
+      <p>Screenshot data stored in <code>chrome.storage.session</code> is:</p>
+      <ul>
+        <li>Cleared immediately when the preview tab reads it (typically within a few seconds of capture).</li>
+        <li>Automatically cleared when the browser session ends, since session storage does not persist across browser restarts.</li>
+        <li>Embedded with a 5-minute expiry timestamp — if the preview tab never loads, the data is discarded on the next read attempt.</li>
+      </ul>
+    </div>
+
+    <!-- 7. Children -->
+    <div class="policy-section" id="children">
+      <h2>7. Children's Privacy</h2>
+      <p>PagePilot Capture is a general-purpose developer and productivity tool not directed at children under the age of 13. Because the extension does not collect any personal information from any user, it poses no specific risk to children's privacy.</p>
+    </div>
+
+    <!-- 8. Changes -->
+    <div class="policy-section" id="changes">
+      <h2>8. Changes to This Policy</h2>
+      <p>If we make material changes to this Privacy Policy, we will update the "Last updated" date at the top of this page and, where appropriate, note the change in the Chrome Web Store listing update notes.</p>
+      <p>Continued use of the extension after changes are posted constitutes acceptance of the revised policy.</p>
+    </div>
+
+    <!-- 9. Contact -->
+    <div class="policy-section" id="contact">
+      <h2>9. Contact</h2>
+      <p>If you have questions or concerns about this Privacy Policy or the extension's data practices, please contact us:</p>
+      <p><strong>Email:</strong> <a href="mailto:tyris77@gmail.com">tyris77@gmail.com</a></p>
+      <p><strong>GitHub:</strong> <a href="https://github.com/tyris77/pagepilot-capture" target="_blank" rel="noopener">github.com/tyris77/pagepilot-capture</a></p>
+      <p>We aim to respond to all privacy inquiries within 5 business days.</p>
+    </div>
+
+  </main>
+
+  <!-- Footer -->
+  <footer>
+    <p>&copy; 2026 PagePilot. &nbsp;·&nbsp; <a href="index.html">Home</a> &nbsp;·&nbsp; <a href="privacy.html">Privacy Policy</a></p>
+  </footer>
+
+</body>
+</html>

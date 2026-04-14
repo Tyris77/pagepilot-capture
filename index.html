@@ -1,0 +1,799 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="UTF-8" />
+  <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+  <title>PagePilot Capture — Full-Page Screenshots for Chrome</title>
+  <meta name="description" content="One-click full-page screenshots for Chrome. Preview, download PNG, export multi-page PDF, or copy to clipboard. Free. No sign-up." />
+  <meta property="og:title" content="PagePilot Capture — Full-Page Screenshots for Chrome" />
+  <meta property="og:description" content="Capture any webpage end-to-end in seconds. Preview, PNG, PDF, clipboard." />
+  <meta property="og:type" content="website" />
+  <meta property="og:url" content="https://tyris77.github.io/pagepilot-capture/" />
+  <meta property="og:image" content="https://tyris77.github.io/pagepilot-capture/og-image.png" />
+  <link rel="preconnect" href="https://fonts.googleapis.com" />
+  <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin />
+  <link href="https://fonts.googleapis.com/css2?family=Inter:wght@400;500;600;700&display=swap" rel="stylesheet" />
+  <style>
+    /* ── Design Tokens ─────────────────────────────────────────────────────── */
+    :root {
+      --blue:       #3069F5;
+      --blue-dk:    #1e4fd8;
+      --blue-lt:    #eff4ff;
+      --dark:       #0f172a;
+      --text:       #334155;
+      --muted:      #64748b;
+      --border:     #e2e8f0;
+      --surface:    #f8fafc;
+      --white:      #ffffff;
+      --radius:     10px;
+      --radius-lg:  18px;
+      --shadow-sm:  0 1px 3px rgba(0,0,0,.07), 0 1px 2px rgba(0,0,0,.05);
+      --shadow-md:  0 4px 20px rgba(0,0,0,.09);
+      --shadow-lg:  0 12px 40px rgba(0,0,0,.12);
+      --font:       'Inter', -apple-system, BlinkMacSystemFont, 'Segoe UI', sans-serif;
+      --max-w:      1100px;
+    }
+
+    /* ── Reset ─────────────────────────────────────────────────────────────── */
+    *, *::before, *::after { box-sizing: border-box; margin: 0; padding: 0; }
+    html { scroll-behavior: smooth; -webkit-font-smoothing: antialiased; }
+    body { font-family: var(--font); color: var(--text); background: var(--white); font-size: 16px; line-height: 1.6; }
+    a { color: inherit; text-decoration: none; }
+    img { max-width: 100%; display: block; }
+    ul { list-style: none; }
+
+    /* ── Layout Helpers ────────────────────────────────────────────────────── */
+    .container { max-width: var(--max-w); margin: 0 auto; padding: 0 24px; }
+    .section    { padding: 96px 0; }
+    .section-sm { padding: 64px 0; }
+
+    /* ── Nav ───────────────────────────────────────────────────────────────── */
+    nav {
+      position: sticky;
+      top: 0;
+      z-index: 100;
+      background: rgba(255,255,255,.9);
+      backdrop-filter: blur(12px);
+      -webkit-backdrop-filter: blur(12px);
+      border-bottom: 1px solid var(--border);
+    }
+    .nav-inner {
+      display: flex;
+      align-items: center;
+      justify-content: space-between;
+      height: 60px;
+    }
+    .nav-brand {
+      display: flex;
+      align-items: center;
+      gap: 9px;
+      font-weight: 700;
+      font-size: 17px;
+      color: var(--dark);
+      letter-spacing: -.3px;
+    }
+    .nav-brand-icon {
+      width: 30px;
+      height: 30px;
+      background: var(--blue);
+      border-radius: 8px;
+      display: flex;
+      align-items: center;
+      justify-content: center;
+      flex-shrink: 0;
+    }
+    .nav-brand-icon svg { width: 16px; height: 16px; color: #fff; }
+    .nav-links { display: flex; align-items: center; gap: 28px; }
+    .nav-links a { font-size: 14px; color: var(--muted); font-weight: 500; transition: color .15s; }
+    .nav-links a:hover { color: var(--dark); }
+    .nav-cta { display: flex; align-items: center; gap: 12px; }
+
+    /* ── Buttons ───────────────────────────────────────────────────────────── */
+    .btn {
+      display: inline-flex;
+      align-items: center;
+      justify-content: center;
+      gap: 8px;
+      height: 42px;
+      padding: 0 20px;
+      border-radius: var(--radius);
+      font-family: var(--font);
+      font-size: 14px;
+      font-weight: 600;
+      cursor: pointer;
+      border: none;
+      transition: background .15s, box-shadow .15s, transform .1s;
+      white-space: nowrap;
+    }
+    .btn:active { transform: scale(.97); }
+    .btn-primary {
+      background: var(--blue);
+      color: #fff;
+      box-shadow: 0 2px 8px rgba(48,105,245,.3);
+    }
+    .btn-primary:hover { background: var(--blue-dk); box-shadow: 0 4px 14px rgba(48,105,245,.4); }
+    .btn-outline {
+      background: transparent;
+      color: var(--text);
+      border: 1.5px solid var(--border);
+    }
+    .btn-outline:hover { border-color: #b0b8c9; background: var(--surface); }
+    .btn-lg { height: 52px; padding: 0 28px; font-size: 16px; border-radius: 12px; }
+    .btn svg { width: 18px; height: 18px; flex-shrink: 0; }
+
+    /* ── Hero ──────────────────────────────────────────────────────────────── */
+    .hero {
+      padding: 96px 0 80px;
+      background: linear-gradient(180deg, var(--surface) 0%, var(--white) 100%);
+      border-bottom: 1px solid var(--border);
+      text-align: center;
+    }
+    .hero-badge {
+      display: inline-flex;
+      align-items: center;
+      gap: 6px;
+      background: var(--blue-lt);
+      color: var(--blue);
+      font-size: 13px;
+      font-weight: 600;
+      padding: 4px 12px;
+      border-radius: 100px;
+      margin-bottom: 28px;
+      letter-spacing: .1px;
+    }
+    .hero-badge span { width: 6px; height: 6px; background: var(--blue); border-radius: 50%; }
+    .hero h1 {
+      font-size: clamp(36px, 5.5vw, 62px);
+      font-weight: 700;
+      line-height: 1.1;
+      letter-spacing: -.03em;
+      color: var(--dark);
+      max-width: 800px;
+      margin: 0 auto 20px;
+    }
+    .hero h1 em { font-style: normal; color: var(--blue); }
+    .hero-sub {
+      font-size: clamp(17px, 2vw, 20px);
+      color: var(--muted);
+      max-width: 560px;
+      margin: 0 auto 40px;
+      line-height: 1.55;
+    }
+    .hero-actions { display: flex; align-items: center; justify-content: center; gap: 14px; flex-wrap: wrap; }
+    .hero-note { margin-top: 16px; font-size: 13px; color: var(--muted); }
+
+    /* ── Browser Mockup ────────────────────────────────────────────────────── */
+    .mockup-wrap {
+      margin: 64px auto 0;
+      max-width: 860px;
+      position: relative;
+    }
+    .browser {
+      background: var(--white);
+      border-radius: var(--radius-lg);
+      box-shadow: var(--shadow-lg), 0 0 0 1px rgba(0,0,0,.06);
+      overflow: hidden;
+    }
+    .browser-bar {
+      background: #f1f3f6;
+      height: 44px;
+      display: flex;
+      align-items: center;
+      padding: 0 16px;
+      gap: 8px;
+      border-bottom: 1px solid var(--border);
+    }
+    .browser-dot { width: 12px; height: 12px; border-radius: 50%; }
+    .browser-dot:nth-child(1) { background: #ff5f56; }
+    .browser-dot:nth-child(2) { background: #ffbd2e; }
+    .browser-dot:nth-child(3) { background: #27c93f; }
+    .browser-url {
+      flex: 1;
+      height: 26px;
+      background: #fff;
+      border-radius: 5px;
+      border: 1px solid var(--border);
+      margin: 0 12px;
+      display: flex;
+      align-items: center;
+      padding: 0 10px;
+      font-size: 12px;
+      color: var(--muted);
+    }
+    .browser-body {
+      padding: 0;
+      min-height: 400px;
+      background: linear-gradient(160deg, #eef3ff 0%, #f8fafc 60%, #fef9f0 100%);
+      display: flex;
+      align-items: center;
+      justify-content: center;
+      flex-direction: column;
+      gap: 20px;
+      position: relative;
+      overflow: hidden;
+    }
+    /* Simulated page content strips */
+    .page-sim { width: 100%; padding: 32px 48px; }
+    .sim-header {
+      height: 52px;
+      background: var(--white);
+      border-radius: 8px;
+      margin-bottom: 20px;
+      display: flex;
+      align-items: center;
+      padding: 0 20px;
+      gap: 16px;
+      box-shadow: var(--shadow-sm);
+    }
+    .sim-logo { width: 90px; height: 14px; background: #cbd5e1; border-radius: 4px; }
+    .sim-nav  { display: flex; gap: 10px; margin-left: auto; }
+    .sim-nav span { width: 44px; height: 10px; background: #e2e8f0; border-radius: 3px; }
+    .sim-hero-block { text-align: center; padding: 32px 20px; }
+    .sim-h { width: 60%; height: 20px; background: #cbd5e1; border-radius: 5px; margin: 0 auto 12px; }
+    .sim-sub { width: 42%; height: 12px; background: #e2e8f0; border-radius: 4px; margin: 0 auto 20px; }
+    .sim-btn-row { display: flex; gap: 10px; justify-content: center; }
+    .sim-btn { width: 100px; height: 32px; background: var(--blue); border-radius: 7px; opacity: .7; }
+    .sim-btn-g { width: 80px; height: 32px; background: var(--border); border-radius: 7px; }
+    .sim-cards { display: grid; grid-template-columns: repeat(3,1fr); gap: 12px; margin-top: 24px; }
+    .sim-card { height: 80px; background: var(--white); border-radius: 8px; box-shadow: var(--shadow-sm); }
+
+    /* Capture overlay pill */
+    .capture-pill {
+      position: absolute;
+      bottom: 24px;
+      right: 24px;
+      background: var(--dark);
+      color: #fff;
+      font-size: 12px;
+      font-weight: 600;
+      padding: 7px 14px;
+      border-radius: 100px;
+      display: flex;
+      align-items: center;
+      gap: 7px;
+      box-shadow: var(--shadow-md);
+      letter-spacing: .1px;
+    }
+    .capture-dot {
+      width: 8px; height: 8px; border-radius: 50%;
+      background: #22c55e;
+      animation: blink 1.2s ease-in-out infinite;
+    }
+    @keyframes blink { 0%,100%{opacity:1} 50%{opacity:.3} }
+
+    /* ── Logos / Trust Strip ───────────────────────────────────────────────── */
+    .trust {
+      padding: 40px 0;
+      border-bottom: 1px solid var(--border);
+      text-align: center;
+    }
+    .trust p { font-size: 13px; color: var(--muted); font-weight: 500; margin-bottom: 24px; text-transform: uppercase; letter-spacing: .08em; }
+    .trust-logos { display: flex; align-items: center; justify-content: center; gap: 48px; flex-wrap: wrap; }
+    .trust-logo {
+      font-size: 15px;
+      font-weight: 700;
+      color: #b0bac9;
+      letter-spacing: -.3px;
+    }
+
+    /* ── Features ──────────────────────────────────────────────────────────── */
+    .features { background: var(--white); }
+    .section-label {
+      font-size: 13px;
+      font-weight: 600;
+      text-transform: uppercase;
+      letter-spacing: .1em;
+      color: var(--blue);
+      margin-bottom: 12px;
+    }
+    .section-title {
+      font-size: clamp(28px, 3.5vw, 42px);
+      font-weight: 700;
+      color: var(--dark);
+      letter-spacing: -.025em;
+      line-height: 1.15;
+      max-width: 600px;
+      margin-bottom: 16px;
+    }
+    .section-sub {
+      font-size: 17px;
+      color: var(--muted);
+      max-width: 520px;
+      line-height: 1.6;
+      margin-bottom: 56px;
+    }
+    .feature-grid {
+      display: grid;
+      grid-template-columns: repeat(3, 1fr);
+      gap: 28px;
+    }
+    .feature-card {
+      background: var(--surface);
+      border: 1px solid var(--border);
+      border-radius: var(--radius-lg);
+      padding: 28px;
+      transition: box-shadow .2s, transform .2s;
+    }
+    .feature-card:hover { box-shadow: var(--shadow-md); transform: translateY(-2px); }
+    .feature-icon {
+      width: 44px; height: 44px;
+      background: var(--blue-lt);
+      border-radius: 10px;
+      display: flex;
+      align-items: center;
+      justify-content: center;
+      margin-bottom: 16px;
+    }
+    .feature-icon svg { width: 22px; height: 22px; color: var(--blue); }
+    .feature-card h3 { font-size: 16px; font-weight: 600; color: var(--dark); margin-bottom: 8px; }
+    .feature-card p  { font-size: 14px; color: var(--muted); line-height: 1.6; }
+
+    /* ── How It Works ──────────────────────────────────────────────────────── */
+    .hiw { background: var(--surface); }
+    .steps { display: grid; grid-template-columns: repeat(3,1fr); gap: 32px; position: relative; }
+    .steps::before {
+      content: '';
+      position: absolute;
+      top: 22px;
+      left: calc(33% + 24px);
+      right: calc(33% + 24px);
+      height: 2px;
+      background: var(--border);
+      pointer-events: none;
+    }
+    .step { text-align: center; padding: 0 16px; }
+    .step-num {
+      width: 44px; height: 44px;
+      border-radius: 50%;
+      background: var(--white);
+      border: 2px solid var(--border);
+      display: flex;
+      align-items: center;
+      justify-content: center;
+      font-weight: 700;
+      font-size: 16px;
+      color: var(--blue);
+      margin: 0 auto 20px;
+      position: relative;
+      z-index: 1;
+    }
+    .step h3 { font-size: 16px; font-weight: 600; color: var(--dark); margin-bottom: 8px; }
+    .step p  { font-size: 14px; color: var(--muted); line-height: 1.6; }
+
+    /* ── Shortcut Callout ──────────────────────────────────────────────────── */
+    .shortcut-strip {
+      background: var(--dark);
+      color: #fff;
+      padding: 48px 0;
+      text-align: center;
+    }
+    .shortcut-strip h2 { font-size: 26px; font-weight: 700; margin-bottom: 10px; letter-spacing: -.02em; }
+    .shortcut-strip p  { font-size: 16px; color: #94a3b8; margin-bottom: 28px; }
+    .kbd-row { display: flex; align-items: center; justify-content: center; gap: 8px; margin-bottom: 32px; }
+    kbd {
+      display: inline-flex;
+      align-items: center;
+      justify-content: center;
+      background: #1e293b;
+      border: 1px solid #334155;
+      border-bottom: 3px solid #334155;
+      border-radius: 6px;
+      padding: 6px 14px;
+      font-family: var(--font);
+      font-size: 14px;
+      font-weight: 600;
+      color: #e2e8f0;
+      box-shadow: 0 2px 4px rgba(0,0,0,.4);
+    }
+    kbd.kbd-plus { background: none; border: none; box-shadow: none; color: #475569; font-size: 16px; }
+
+    /* ── FAQ ───────────────────────────────────────────────────────────────── */
+    .faq { background: var(--white); }
+    .faq-grid { max-width: 720px; margin: 0 auto; display: flex; flex-direction: column; gap: 0; }
+    details {
+      border-bottom: 1px solid var(--border);
+      padding: 20px 0;
+    }
+    details:first-of-type { border-top: 1px solid var(--border); }
+    summary {
+      font-weight: 600;
+      font-size: 15px;
+      color: var(--dark);
+      cursor: pointer;
+      list-style: none;
+      display: flex;
+      align-items: center;
+      justify-content: space-between;
+      gap: 16px;
+      user-select: none;
+    }
+    summary::-webkit-details-marker { display: none; }
+    summary::after {
+      content: '+';
+      font-size: 20px;
+      font-weight: 400;
+      color: var(--muted);
+      flex-shrink: 0;
+      transition: transform .2s;
+    }
+    details[open] summary::after { transform: rotate(45deg); }
+    .faq-body { padding-top: 12px; font-size: 14px; color: var(--muted); line-height: 1.7; }
+    .faq-body a { color: var(--blue); text-decoration: underline; }
+
+    /* ── CTA Banner ────────────────────────────────────────────────────────── */
+    .cta-banner {
+      background: linear-gradient(135deg, #1e3a8a 0%, #3069F5 100%);
+      padding: 96px 0;
+      text-align: center;
+      color: #fff;
+    }
+    .cta-banner h2 { font-size: clamp(28px, 3vw, 44px); font-weight: 700; letter-spacing: -.025em; margin-bottom: 14px; }
+    .cta-banner p  { font-size: 17px; color: rgba(255,255,255,.75); margin-bottom: 36px; }
+    .cta-banner .btn-primary { background: #fff; color: var(--blue); box-shadow: 0 4px 20px rgba(0,0,0,.2); }
+    .cta-banner .btn-primary:hover { background: #f0f5ff; }
+    .cta-note { margin-top: 16px; font-size: 13px; color: rgba(255,255,255,.5); }
+
+    /* ── Footer ────────────────────────────────────────────────────────────── */
+    footer {
+      background: var(--dark);
+      color: #94a3b8;
+      padding: 40px 0;
+      font-size: 14px;
+    }
+    .footer-inner {
+      display: flex;
+      align-items: center;
+      justify-content: space-between;
+      flex-wrap: wrap;
+      gap: 16px;
+    }
+    .footer-brand { color: #fff; font-weight: 600; font-size: 15px; }
+    .footer-links { display: flex; gap: 24px; }
+    .footer-links a { transition: color .15s; }
+    .footer-links a:hover { color: #fff; }
+
+    /* ── Responsive ────────────────────────────────────────────────────────── */
+    @media (max-width: 768px) {
+      .nav-links { display: none; }
+      .feature-grid { grid-template-columns: 1fr; }
+      .steps { grid-template-columns: 1fr; gap: 40px; }
+      .steps::before { display: none; }
+      .hero { padding: 72px 0 56px; }
+      .section { padding: 72px 0; }
+      .mockup-wrap { margin-top: 48px; }
+      .sim-cards { grid-template-columns: repeat(2,1fr); }
+      .trust-logos { gap: 28px; }
+      .footer-inner { flex-direction: column; align-items: flex-start; }
+    }
+    @media (max-width: 560px) {
+      .btn-lg { width: 100%; }
+      .hero-actions { flex-direction: column; align-items: stretch; }
+    }
+  </style>
+</head>
+<body>
+
+  <!-- ── Navigation ──────────────────────────────────────────────────────────── -->
+  <nav>
+    <div class="container nav-inner">
+      <a href="/" class="nav-brand">
+        <div class="nav-brand-icon">
+          <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.2" stroke-linecap="round" stroke-linejoin="round">
+            <path d="M23 19a2 2 0 0 1-2 2H3a2 2 0 0 1-2-2V8a2 2 0 0 1 2-2h4l2-3h6l2 3h4a2 2 0 0 1 2 2z"/>
+            <circle cx="12" cy="13" r="4"/>
+          </svg>
+        </div>
+        PagePilot Capture
+      </a>
+      <div class="nav-links">
+        <a href="#features">Features</a>
+        <a href="#how-it-works">How it works</a>
+        <a href="#faq">FAQ</a>
+        <a href="privacy.html">Privacy</a>
+      </div>
+      <div class="nav-cta">
+        <a href="REPLACE_WITH_WEB_STORE_URL_AFTER_APPROVAL" class="btn btn-primary" target="_blank" rel="noopener">
+          <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round">
+            <path d="M21 15v4a2 2 0 0 1-2 2H5a2 2 0 0 1-2-2v-4"/>
+            <polyline points="7 10 12 15 17 10"/>
+            <line x1="12" y1="15" x2="12" y2="3"/>
+          </svg>
+          Add to Chrome
+        </a>
+      </div>
+    </div>
+  </nav>
+
+  <!-- ── Hero ─────────────────────────────────────────────────────────────────── -->
+  <section class="hero">
+    <div class="container">
+      <div class="hero-badge"><span></span> Free Chrome Extension</div>
+      <h1>Screenshot the <em>whole page.</em><br>Not just what fits.</h1>
+      <p class="hero-sub">PagePilot Capture scrolls, stitches, and delivers a pixel-perfect full-page screenshot — ready to download as PNG, export as PDF, or copy to clipboard in one click.</p>
+      <div class="hero-actions">
+        <a href="REPLACE_WITH_WEB_STORE_URL_AFTER_APPROVAL" class="btn btn-primary btn-lg" target="_blank" rel="noopener">
+          <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round">
+            <path d="M21 15v4a2 2 0 0 1-2 2H5a2 2 0 0 1-2-2v-4"/>
+            <polyline points="7 10 12 15 17 10"/>
+            <line x1="12" y1="15" x2="12" y2="3"/>
+          </svg>
+          Install on Chrome — it's free
+        </a>
+        <a href="#how-it-works" class="btn btn-outline btn-lg">See how it works</a>
+      </div>
+      <p class="hero-note">No account required &nbsp;·&nbsp; Works on any webpage &nbsp;·&nbsp; Runs entirely in your browser</p>
+
+      <!-- Browser Mockup -->
+      <div class="mockup-wrap">
+        <div class="browser">
+          <div class="browser-bar">
+            <div class="browser-dot"></div>
+            <div class="browser-dot"></div>
+            <div class="browser-dot"></div>
+            <div class="browser-url">example.com/landing-page</div>
+          </div>
+          <div class="browser-body">
+            <div class="page-sim">
+              <div class="sim-header">
+                <div class="sim-logo"></div>
+                <div class="sim-nav"><span></span><span></span><span></span></div>
+              </div>
+              <div class="sim-hero-block">
+                <div class="sim-h"></div>
+                <div class="sim-sub"></div>
+                <div class="sim-btn-row">
+                  <div class="sim-btn"></div>
+                  <div class="sim-btn-g"></div>
+                </div>
+              </div>
+              <div class="sim-cards">
+                <div class="sim-card"></div>
+                <div class="sim-card"></div>
+                <div class="sim-card"></div>
+              </div>
+            </div>
+            <div class="capture-pill">
+              <div class="capture-dot"></div>
+              Capturing page… 4 / 7 slices
+            </div>
+          </div>
+        </div>
+      </div>
+    </div>
+  </section>
+
+  <!-- ── Trust Strip ───────────────────────────────────────────────────────────── -->
+  <div class="trust">
+    <div class="container">
+      <p>Built for teams that move fast</p>
+      <div class="trust-logos">
+        <span class="trust-logo">Marketers</span>
+        <span class="trust-logo">Designers</span>
+        <span class="trust-logo">Developers</span>
+        <span class="trust-logo">Agency Ops</span>
+        <span class="trust-logo">QA Teams</span>
+      </div>
+    </div>
+  </div>
+
+  <!-- ── Features ──────────────────────────────────────────────────────────────── -->
+  <section class="section features" id="features">
+    <div class="container">
+      <div class="section-label">Features</div>
+      <h2 class="section-title">Everything you need. Nothing you don't.</h2>
+      <p class="section-sub">Built for speed. No settings to configure, no account to create, no data leaving your machine.</p>
+      <div class="feature-grid">
+
+        <div class="feature-card">
+          <div class="feature-icon">
+            <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round">
+              <path d="M23 19a2 2 0 0 1-2 2H3a2 2 0 0 1-2-2V8a2 2 0 0 1 2-2h4l2-3h6l2 3h4a2 2 0 0 1 2 2z"/>
+              <circle cx="12" cy="13" r="4"/>
+            </svg>
+          </div>
+          <h3>One-Click Capture</h3>
+          <p>Click the toolbar icon or press Alt+Shift+P. The extension scrolls and captures automatically — you don't lift a finger.</p>
+        </div>
+
+        <div class="feature-card">
+          <div class="feature-icon">
+            <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round">
+              <polyline points="22 12 16 12 14 15 10 15 8 12 2 12"/>
+              <path d="M5.45 5.11L2 12v6a2 2 0 0 0 2 2h16a2 2 0 0 0 2-2v-6l-3.45-6.89A2 2 0 0 0 16.76 4H7.24a2 2 0 0 0-1.79 1.11z"/>
+            </svg>
+          </div>
+          <h3>Full-Page Stitching</h3>
+          <p>Each viewport slice is stitched into a single seamless image. No visible gaps, no repeated headers, no missing content.</p>
+        </div>
+
+        <div class="feature-card">
+          <div class="feature-icon">
+            <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round">
+              <path d="M14 2H6a2 2 0 0 0-2 2v16a2 2 0 0 0 2 2h12a2 2 0 0 0 2-2V8z"/>
+              <polyline points="14 2 14 8 20 8"/>
+              <line x1="16" y1="13" x2="8" y2="13"/>
+              <line x1="16" y1="17" x2="8" y2="17"/>
+            </svg>
+          </div>
+          <h3>Multi-Page PDF Export</h3>
+          <p>Tall pages are automatically split across A4 pages in the PDF — no library required, no file size surprises.</p>
+        </div>
+
+        <div class="feature-card">
+          <div class="feature-icon">
+            <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round">
+              <rect x="9" y="9" width="13" height="13" rx="2" ry="2"/>
+              <path d="M5 15H4a2 2 0 0 1-2-2V4a2 2 0 0 1 2-2h9a2 2 0 0 1 2 2v1"/>
+            </svg>
+          </div>
+          <h3>Copy to Clipboard</h3>
+          <p>Skip the download — copy the screenshot directly. Paste into Figma, Notion, Slack, or your email client instantly.</p>
+        </div>
+
+        <div class="feature-card">
+          <div class="feature-icon">
+            <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round">
+              <circle cx="12" cy="12" r="10"/>
+              <polyline points="12 6 12 12 16 14"/>
+            </svg>
+          </div>
+          <h3>Handles Sticky Headers</h3>
+          <p>Fixed and sticky elements are hidden during capture so they don't stamp across every slice, then fully restored afterwards.</p>
+        </div>
+
+        <div class="feature-card">
+          <div class="feature-icon">
+            <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round">
+              <path d="M12 22s8-4 8-10V5l-8-3-8 3v7c0 6 8 10 8 10z"/>
+            </svg>
+          </div>
+          <h3>100% Local Processing</h3>
+          <p>Screenshots never leave your browser. No server, no upload, no third-party analytics. Your data stays yours.</p>
+        </div>
+
+      </div>
+    </div>
+  </section>
+
+  <!-- ── How It Works ───────────────────────────────────────────────────────────── -->
+  <section class="section hiw" id="how-it-works">
+    <div class="container">
+      <div class="section-label">How It Works</div>
+      <h2 class="section-title">From page to screenshot in three steps.</h2>
+      <p class="section-sub">No configuration. No learning curve.</p>
+      <div class="steps">
+        <div class="step">
+          <div class="step-num">1</div>
+          <h3>Click the icon</h3>
+          <p>Navigate to any webpage and click the PagePilot icon in your Chrome toolbar — or press Alt+Shift+P.</p>
+        </div>
+        <div class="step">
+          <div class="step-num">2</div>
+          <h3>Capture runs automatically</h3>
+          <p>The extension scrolls the page, captures each viewport, and stitches the slices together behind the scenes.</p>
+        </div>
+        <div class="step">
+          <div class="step-num">3</div>
+          <h3>Export your way</h3>
+          <p>A preview tab opens immediately. Download as PNG, export a multi-page PDF, or copy directly to your clipboard.</p>
+        </div>
+      </div>
+    </div>
+  </section>
+
+  <!-- ── Keyboard Shortcut Strip ───────────────────────────────────────────────── -->
+  <div class="shortcut-strip">
+    <div class="container">
+      <h2>Capture without breaking flow.</h2>
+      <p>Use the keyboard shortcut from any tab — no mouse required.</p>
+      <div class="kbd-row">
+        <kbd>Alt</kbd>
+        <kbd class="kbd-plus">+</kbd>
+        <kbd>Shift</kbd>
+        <kbd class="kbd-plus">+</kbd>
+        <kbd>P</kbd>
+      </div>
+      <a href="REPLACE_WITH_WEB_STORE_URL_AFTER_APPROVAL" class="btn btn-primary btn-lg" target="_blank" rel="noopener">
+        Add to Chrome — Free
+      </a>
+    </div>
+  </div>
+
+  <!-- ── FAQ ───────────────────────────────────────────────────────────────────── -->
+  <section class="section faq" id="faq">
+    <div class="container">
+      <div style="text-align:center; margin-bottom: 56px;">
+        <div class="section-label">FAQ</div>
+        <h2 class="section-title" style="margin: 0 auto;">Common questions.</h2>
+      </div>
+      <div class="faq-grid">
+
+        <details open>
+          <summary>Does it work on every website?</summary>
+          <div class="faq-body">PagePilot Capture works on the vast majority of websites. Chrome system pages (like <code>chrome://settings</code>) cannot be captured due to browser security restrictions — the extension will show a friendly error if you try. Pages behind login walls are captured exactly as you see them when logged in.</div>
+        </details>
+
+        <details>
+          <summary>Will it capture lazy-loaded images?</summary>
+          <div class="faq-body">Yes. The extension adds a settle delay after each scroll step so lazy-loaded content has time to render before the screenshot fires. Very slow CDNs or custom loaders may occasionally not fully resolve — in those cases a second capture pass usually helps.</div>
+        </details>
+
+        <details>
+          <summary>How does the PDF export work?</summary>
+          <div class="faq-body">The full-page canvas is sliced into A4-sized rows and each row is embedded as a JPEG image in a standard PDF. No external library is required. The resulting PDF downloads directly to your machine — nothing is sent to a server.</div>
+        </details>
+
+        <details>
+          <summary>Is my data stored or sent anywhere?</summary>
+          <div class="faq-body">No. All processing happens locally inside your browser using the Canvas API. Screenshots are stored temporarily in Chrome's session storage until the preview tab loads, then immediately deleted. No analytics, no telemetry, no servers. See our <a href="privacy.html">Privacy Policy</a> for full details.</div>
+        </details>
+
+        <details>
+          <summary>Can I change the keyboard shortcut?</summary>
+          <div class="faq-body">Yes. Go to <code>chrome://extensions/shortcuts</code> in Chrome, find PagePilot Capture, and assign any combination you prefer. The default is Alt+Shift+P.</div>
+        </details>
+
+        <details>
+          <summary>Is it really free?</summary>
+          <div class="faq-body">Yes, completely free. No freemium tier, no capture limits, no watermarks. Install it and use it without restriction.</div>
+        </details>
+
+      </div>
+    </div>
+  </section>
+
+  <!-- ── CTA Banner ─────────────────────────────────────────────────────────────── -->
+  <div class="cta-banner">
+    <div class="container">
+      <h2>Start capturing in 30 seconds.</h2>
+      <p>Install once. Works on every tab, every page, instantly.</p>
+      <a href="REPLACE_WITH_WEB_STORE_URL_AFTER_APPROVAL" class="btn btn-primary btn-lg" target="_blank" rel="noopener">
+        <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round">
+          <path d="M21 15v4a2 2 0 0 1-2 2H5a2 2 0 0 1-2-2v-4"/>
+          <polyline points="7 10 12 15 17 10"/>
+          <line x1="12" y1="15" x2="12" y2="3"/>
+        </svg>
+        Install PagePilot Capture
+      </a>
+      <p class="cta-note">Chrome browser required &nbsp;·&nbsp; Free, no account needed</p>
+    </div>
+  </div>
+
+  <!-- ── Footer ────────────────────────────────────────────────────────────────── -->
+  <footer>
+    <div class="container footer-inner">
+      <span class="footer-brand">PagePilot Capture</span>
+      <div class="footer-links">
+        <a href="REPLACE_WITH_WEB_STORE_URL_AFTER_APPROVAL" target="_blank" rel="noopener">Chrome Web Store</a>
+        <a href="privacy.html">Privacy Policy</a>
+        <a href="mailto:tyris77@gmail.com">Contact</a>
+      </div>
+      <span>&copy; 2026 PagePilot. All rights reserved.</span>
+    </div>
+  </footer>
+
+  <script>
+    // Animate feature cards in on scroll
+    if ('IntersectionObserver' in window) {
+      const cards = document.querySelectorAll('.feature-card, .step');
+      const observer = new IntersectionObserver((entries) => {
+        entries.forEach((e, i) => {
+          if (e.isIntersecting) {
+            e.target.style.transition = `opacity .4s ease ${i * 60}ms, transform .4s ease ${i * 60}ms`;
+            e.target.style.opacity = '1';
+            e.target.style.transform = 'translateY(0)';
+            observer.unobserve(e.target);
+          }
+        });
+      }, { threshold: 0.1 });
+
+      cards.forEach(card => {
+        card.style.opacity = '0';
+        card.style.transform = 'translateY(18px)';
+        observer.observe(card);
+      });
+    }
+  </script>
+
+</body>
+</html>
